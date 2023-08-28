@@ -44,7 +44,7 @@ def login():
     userName = request.json.get('username',None)
     password = request.json.get('password',None)
     if not userName or not password:
-        return {"statusCode":0,"response":"username and password are required"}
+        return {"statusCode":200,"response":"username and password are required"}
     access_token = create_access_token(identity=userName)
     user = User(userName=userName,password=password)
     if user.password == password:
@@ -66,13 +66,13 @@ def search():
         search_entry = SearchHistory(user_id = current_user,location = location[0]["LocalizedName"], minimumTemperature = weather_data[0]["Temperature"]["Minimum"]["Value"],maximumTemperature=weather_data[0]["Temperature"]["Maximum"]["Value"],dayHasPrecipitation =weather_data[0]["Day"]["HasPrecipitation"] ,nightHasPrecipitation =weather_data[0]["Night"]["HasPrecipitation"] ,dayIconPhrase =weather_data[0]["Day"]["IconPhrase"] ,nightIconPhrase =weather_data[0]["Night"]["IconPhrase"] ,PrecipitationType = weather_data[0]["Day"]["PrecipitationType"])
         db.session.add(search_entry)
         db.session.commit()
-        return {"statusCode": 1 , "response":"Data Added Successfully"}
+        return {"statusCode": 200 , "response":"Data Added Successfully"}
     except Exception as e:
         print(str(e))
-        return {"statusCode": 0 , "response":"Data Not Added"}
+        return {"statusCode": 404 , "response":"Data Not Added"}
      
 
 
 if __name__ == '__main__':
-    db.createall()
+    db.create_all()
     app.run(debug = True)
